@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Future Forge</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Inline CSS for Hero Section Background */
+        .hero {
+            background: url('https://www.chriskenber.com/wp-content/uploads/2017/10/career-crossroads.jpg') no-repeat center center/cover;
+            color: #fff;
+            padding: 100px 20px;
+            text-align: center;
+            box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Additional Styling for Testimonial Section */
+        .testimonials {
+            padding: 50px 20px;
+            background-color: #f9f9f9;
+            text-align: center;
+        }
+
+        .testimonials h2 {
+            margin-bottom: 20px;
+            color: #ff5722;
+        }
+
+        .testimonials-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        blockquote {
+            max-width: 300px;
+            font-style: italic;
+            color: #555;
+            border-left: 4px solid #ff5722;
+            padding: 10px 20px;
+            background: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        blockquote cite {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Additional Styling for Footer */
+        .contact {
+            padding: 30px 20px;
+            background: #333;
+            color: #fff;
+            text-align: center;
+        }
+
+        .contact a {
+            color: #ff9800;
+            text-decoration: none;
+        }
+
+        .contact a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <div class="logo">
+            <iframe 
+                src="https://www.canva.com/design/DAGXYmM40Yc/9S8Tfk8gNYm4oO_hD2ynPA/view?embed" 
+                width="150" 
+                height="50" 
+                frameborder="0" 
+                allowfullscreen 
+                title="Future Forge Logo">
+            </iframe>
+        </div>
+        <nav class="navbar">
+            <ul>
+                <li><a href="#about">About</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#how-it-works">How It Works</a></li>
+                <li><a href="#testimonials">Testimonials</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li><a href="login.html">Login / Signup</a></li>
+                
+
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="about">
+        <div class="hero-content">
+            <h1>Forge Your Future with FutureForge</h1>
+            <p>Your all-in-one platform for personalized career guidance and gamified learning experiences.</p>
+            <a href="signup.html" class="cta-button">Sign Up</a>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <h2>Why Choose FutureForge?</h2>
+        <div class="feature-cards">
+            <div class="card">
+                <h3>Personalized Plans</h3>
+                <p>Tailored career roadmaps based on your level and interests.</p>
+            </div>
+            <div class="card">
+                <h3>Comprehensive Resources</h3>
+                <p>Access curated articles, notes, and video content all in one place.</p>
+            </div>
+            <div class="card">
+                <h3>Interactive Coach</h3>
+                <p>Chatbot support with practice questions, summaries, and tips.</p>
+            </div>
+            <div class="card">
+                <h3>Gamified Learning</h3>
+                <p>Earn badges and rewards as you achieve your milestones.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="how-it-works" id="how-it-works">
+        <h2>How It Works</h2>
+        <div class="steps">
+            <div class="step">
+                <h3>Step 1</h3>
+                <p>Create your profile and share your career goals.</p>
+            </div>
+            <div class="step">
+                <h3>Step 2</h3>
+                <p>Get a personalized roadmap tailored to your interests.</p>
+            </div>
+            <div class="step">
+                <h3>Step 3</h3>
+                <p>Track your progress with gamified milestones.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials" id="testimonials">
+        <h2>What Users Say</h2>
+        <div class="testimonials-container">
+            <blockquote>
+                <p>"FutureForge helped me excel in my career goals with its unique approach!"</p>
+                <cite>- Alex D.</cite>
+            </blockquote>
+            <blockquote>
+                <p>"The gamification made learning so much more engaging. Highly recommend!"</p>
+                <cite>- Priya R.</cite>
+            </blockquote>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <footer class="contact" id="contact">
+        <h2>Contact Us</h2>
+        <p>Have questions? Reach out to us at <a href="mailto:support@futureforge.com">support@futureforge.com</a>.</p>
+    </footer>
+
+    
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Help Popup</title>
+  <style>
+    /* Popup container */
+    .help-popup {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #007bff;
+      color: white;
+      padding: 15px 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      font-family: Arial, sans-serif;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    .help-popup:hover {
+      background-color: #0056b3;
+    }
+
+    /* Keyframe animation for popup */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Optional: Close button */
+    .close-btn {
+      margin-left: 10px;
+      background-color: white;
+      color: #007bff;
+      border: none;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+      transition: background-color 0.2s ease;
+    }
+
+    .close-btn:hover {
+      background-color: #e0e0e0;
+    }
+  </style>
+</head>
+<body>
+
+<div class="help-popup" id="helpPopup">
+  May I help you?
+  <button class="close-btn" onclick="closePopup()">×</button>
+
+</div>
+
+<script>
+  // Close the popup when the close button is clicked
+  function closePopup() {
+    const popup = document.getElementById('helpPopup');
+    popup.style.display = 'none';
+  }
+</script>
+
+</body>
+</html>

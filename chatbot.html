@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career Counseling Chatbot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+
+        .chatbox {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .messages {
+            height: 300px;
+            overflow-y: auto;
+            border-bottom: 2px solid #f4f4f4;
+            padding: 10px;
+        }
+
+        .message {
+            margin-bottom: 10px;
+        }
+
+        .user-message {
+            text-align: right;
+            color: #ff9800;
+        }
+
+        .bot-message {
+            text-align: left;
+            color: #555;
+        }
+
+        .chat-input {
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+
+        .chat-input button {
+            padding: 10px;
+            background: #ff9800;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .chat-input button:hover {
+            background: #ff5722;
+        }
+
+        .voice-button {
+            background-color: #4caf50;
+        }
+
+        .voice-button:hover {
+            background-color: #45a049;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="chatbox">
+        <div class="messages" id="messages">
+            <!-- Chat messages will appear here -->
+        </div>
+
+        <div class="chat-input">
+            <input type="text" id="user-input" placeholder="Type your message..." />
+            <button onclick="sendMessage()">Send</button>
+            <button class="voice-button" onclick="startVoiceInput()">🎤</button>
+        </div>
+    </div>
+
+    <script>
+        // Initialize SpeechRecognition API
+        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        recognition.lang = 'en-US';
+
+        const messagesContainer = document.getElementById('messages');
+        const userInput = document.getElementById('user-input');
+
+        // Display message in the chat window
+        function displayMessage(message, sender = 'bot') {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message');
+            messageElement.classList.add(sender === 'user' ? 'user-message' : 'bot-message');
+            messageElement.textContent = message;
+            messagesContainer.appendChild(messageElement);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // Send text message
+        function sendMessage() {
+            const text = userInput.value;
+            if (text) {
+                displayMessage(text, 'user');
+                getBotResponse(text);
+                userInput.value = ''; // Clear input field
+            }
+        }
+
+        // Get bot response (simulating AI/Chatbot backend)
+        function getBotResponse(text) {
+            // Example: Check for common questions
+            let botResponse = '';
+
+            if (text.toLowerCase().includes('career options')) {
+                botResponse = "There are many career options. Do you have any specific field in mind like tech, arts, or healthcare?";
+            } else if (text.toLowerCase().includes('help with resume')) {
+                botResponse = "I can help you with resume tips. Would you like to start with your professional summary?";
+            } else if (text.toLowerCase().includes('courses to take')) {
+                botResponse = "Depending on your career goals, there are many courses available. What field are you interested in?";
+            } else {
+                botResponse = "I'm sorry, I didn't quite get that. Could you please rephrase?";
+            }
+
+            displayMessage(botResponse, 'bot');
+            speak(botResponse); // Voice output
+        }
+
+        // Voice Output using SpeechSynthesis API
+        function speak(text) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'en-US';
+            window.speechSynthesis.speak(utterance);
+        }
+
+        // Voice Input using SpeechRecognition API
+        function startVoiceInput() {
+            recognition.start();
+        }
+
+        // Handle voice input recognition
+        recognition.onresult = function (event) {
+            const transcript = event.results[0][0].transcript;
+            userInput.value = transcript;
+            sendMessage(); // Send the recognized text as message
+        };
+
+        // Handle error in speech recognition
+        recognition.onerror = function (event) {
+            console.error("Speech recognition error:", event.error);
+        };
+
+        // Initial welcome message from the bot
+        displayMessage("Hello! I am your Career Counseling Assistant. How can I help you today?", 'bot');
+    </script>
+
+</body>
+</html>
