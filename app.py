@@ -236,7 +236,92 @@ if st.session_state.get('chosen_character') and st.session_state.get('nickname')
             response = get_response(roadmap_message)
             # Responses will now appear in the sidebar only, not in the main section.
             st.sidebar.write(f"**Forge Lord Response:** {response}")
+# --- Hero Section ---
+        st.markdown(
+            """
+            <div class="hero" style="color: black;">
+                <h1>Forge Your Future with FutureForge</h1>
+                <p>Explore personalized career guidance, interactive learning, and gamified experiences!</p>
+                <a href="#features" class="cta-button">Explore Features</a>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
 
+        # --- Features Section with Blocks ---
+        st.markdown(
+            """
+            <div class="features" id="features" style="color: black;">
+                <h2>Why Choose FutureForge?</h2>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+
+        # Create 3 columns for the blocks of options
+        col1, col2, col3 = st.columns(3)
+
+        # Column 1: Personalized Plans
+        with col1:
+            st.markdown(
+                """
+                <div class="feature-card">
+                    <h3>📋 Personalized Plans</h3>
+                    <p>Get tailored career roadmaps that suit your goals and aspirations.</p>
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
+
+        # Column 2: Comprehensive Resources
+        with col2:
+            st.markdown(
+                """
+                <div class="feature-card">
+                    <h3><a href="https://docs.google.com/spreadsheets/d/1YrRdYjbG7CSSIwwTVXjLsOwNx8wSGUQe/edit?gid=239769048#gid=239769048">📚 Comprehensive Resources</h3>
+                    <p>Access articles, notes, and videos curated for your learning needs.</p>
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
+        # Column 3: Interactive Chatbot
+        with col3:
+            st.markdown(
+                """
+                <div class="feature-card">
+                    <h3>🤖 Interactive Chatbot</h3>
+                    <p>Chat with our AI coach to get answers, summaries, and tips.</p>
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
+
+        # --- Add more rows if needed ---
+        col4, col5 = st.columns(2)
+
+        # Column 4: Gamified Learning
+        with col4:
+            st.markdown(
+                """
+                <div class="feature-card">
+                    <h3>🏆 Gamified Learning</h3>
+                    <p>Earn rewards and badges as you achieve your milestones!</p>
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
+
+        # Column 5: Additional Feature (if needed)
+        with col5:
+            st.markdown(
+                """
+                <div class="feature-card">
+                    <h3>🌱 Continuous Growth</h3>
+                    <p>Keep progressing with continuous learning and development paths.</p>
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
         # --- Chatbot in Sidebar ---
         st.sidebar.title(f"Chat with Forge Lord 🤖 (Level {st.session_state.user_level})")
 
