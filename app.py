@@ -109,7 +109,6 @@ def upgrade_character():
     return None
 
 # --- Streamlit App ---
-# --- Streamlit App ---
 def main():
     
     # Load CSS
@@ -197,10 +196,15 @@ def main():
             **Career Goals:** {st.session_state.career_goals}
             **Current Skills:** {st.session_state.skills}
             **Preferred Learning Mode:** {st.session_state.learning_modes}
+            
+            Based on this information, Forge Lord will now suggest a step-by-step career path including potential exams or certifications.
             """
-            st.session_state.roadmap = roadmap_message
+            st.write(roadmap_message)
+            response = get_response(roadmap_message)
+            # Responses will now appear in the sidebar only, not in the main section.
+            st.sidebar.write(f"**Forge Lord Response:** {response}")
 
-        # --- Sidebar Section ---
+        # --- Chatbot in Sidebar ---
         st.sidebar.title(f"Chat with Forge Lord 🤖 (Level {st.session_state.user_level})")
 
         # Display Character Avatar in Sidebar
@@ -212,13 +216,15 @@ def main():
             unsafe_allow_html=True
         )
 
-        # Chatbot Area
+        # Add a text area for multi-line input
         user_input = st.sidebar.text_area("Type your question:", placeholder="Ask me anything...")
 
+        # Display responses interactively with styled text box
         if st.sidebar.button("Submit"):
             if user_input:
                 with st.spinner("Thinking... 🤔"):
                     response = get_response(user_input)
+
                     st.sidebar.markdown(f"""
                     <div style='
                         background-color: #f8f9fa; 
@@ -231,15 +237,15 @@ def main():
                         <strong>Response:</strong> {response}
                     </div>
                     """, unsafe_allow_html=True)
+
+                    # Increase experience points after each interaction
                     st.session_state.experience_points += 10
+
+                    # Store chat history
                     st.session_state.chat_history.append((user_input, response))
+
             else:
                 st.sidebar.warning("Please enter a question!")
-
-        # --- Roadmap Display ---
-        if 'roadmap' in st.session_state:
-            st.sidebar.markdown("## Your Roadmap 🗺️")
-            st.sidebar.markdown(st.session_state.roadmap)
 
         # --- How It Works Section ---
         st.markdown(
