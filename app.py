@@ -117,29 +117,63 @@ def main():
     # Initialize Session State
     initialize_session_state()
 
-    # --- Character Selection Section ---
-    if not st.session_state.get('chosen_character'):
-        st.title("Welcome to Future Forge!")
-        st.write("Select your character to begin:")
+# --- Character Selection Section ---
+if not st.session_state.get('chosen_character'):
+    st.title("Welcome to Future Forge!")
+    st.write("Select your character to begin:")
 
-        # Character selection dropdown
-        character_choice = st.selectbox(
-            "Choose your Forge Master",
-            ["Cool Guy", "Cute Girl", "Fierce Dragon"]
-        )
+    # Define character options and their images
+    characters = {
+        "Cool Guy": "static/images/avatar_level_1.png",
+        "Cute Girl": "static/images/avatar_level_1_character_2.png",
+        "Fierce Dragon": "static/images/avatar_level_1_character_3.png"
+    }
 
-        # Input field for nickname
-        nickname_input = st.text_input("Give your character a nickname:", placeholder="Enter a nickname")
+    # Display character options as clickable buttons with images
+    col1, col2, col3 = st.columns(3)  # Create three columns for layout
+    with col1:
+        if st.button("Cool Guy"):
+            st.session_state.chosen_character = "Cool Guy"
+    with col2:
+        if st.button("Cute Girl"):
+            st.session_state.chosen_character = "Cute Girl"
+    with col3:
+        if st.button("Fierce Dragon"):
+            st.session_state.chosen_character = "Fierce Dragon"
 
-        # Button to confirm character and nickname
-        if st.button("Select Character"):
-            if nickname_input.strip():
-                st.session_state.chosen_character = character_choice
-                st.session_state.nickname = nickname_input.strip()
-                st.success(f"Character '{character_choice}' is selected with nickname '{nickname_input}'!")
-                st.experimental_rerun()
-            else:
-                st.warning("Please provide a nickname for your character!")
+    # Display character images in columns
+    col1.image(characters["Cool Guy"], use_column_width=True)
+    col2.image(characters["Cute Girl"], use_column_width=True)
+    col3.image(characters["Fierce Dragon"], use_column_width=True)
+
+    # Provide feedback if a character is chosen
+    if st.session_state.get('chosen_character'):
+        st.success(f"You have chosen: {st.session_state.chosen_character}!")
+        st.experimental_rerun()  # Rerun to refresh the session state
+
+# --- Nickname Input Section ---
+if st.session_state.get('chosen_character') and not st.session_state.get('nickname'):
+    st.title("Personalize Your Character")
+    st.write(f"You have selected **{st.session_state.chosen_character}**. Now, give your character a nickname to proceed!")
+
+    # Input field for nickname
+    nickname_input = st.text_input("Enter your character's nickname:", placeholder="Enter a nickname")
+
+    # Button to confirm nickname
+    if st.button("Confirm Nickname"):
+        if nickname_input.strip():
+            st.session_state.nickname = nickname_input.strip()
+            st.success(f"Welcome, {st.session_state.nickname} the {st.session_state.chosen_character}!")
+            st.experimental_rerun()  # Refresh to update the session
+        else:
+            st.warning("Please provide a valid nickname to continue.")
+
+# --- Continue to Main App After Character and Nickname Selection ---
+if st.session_state.get('chosen_character') and st.session_state.get('nickname'):
+    st.title(f"Welcome {st.session_state.nickname}!")
+    st.write(f"Your journey as **{st.session_state.chosen_character}** begins now. 🎉")
+    # The rest of the app's features can be implemented here
+
 
     # --- Post Character Selection: Collect Career Information ---
     if st.session_state.get('chosen_character') and st.session_state.get('nickname'):
