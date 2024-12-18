@@ -170,8 +170,7 @@ if st.session_state.get('chosen_character') and not st.session_state.get('nickna
 
 # --- Continue to Main App After Character and Nickname Selection ---
 if st.session_state.get('chosen_character') and st.session_state.get('nickname'):
-    st.title(f"Welcome {st.session_state.nickname}!")
-    st.write(f"Your journey as **{st.session_state.chosen_character}** begins now. 🎉")
+    st.title(f"Your journey as **{st.session_state.chosen_character}** begins now. 🎉")
     # The rest of the app's features can be implemented here
 
 
