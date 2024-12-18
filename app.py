@@ -3,25 +3,32 @@ import os
 import time
 from io import BytesIO
 import google.generativeai as genai
+from dotenv import load_dotenv
 
-# Set the API Key
-genai.configure(api_key=os.environ["GEMINI_API_KEY"])
+load_dotenv()  # Load environment variables from .env file
+
+# Access the API key from the environment variables
+api_key = os.getenv("GOOGLE_API_KEY")
+if api_key:
+    genai.configure(api_key=api_key)
+else:
+    raise ValueError("API Key is missing in the environment variables")
 
 # Create the model
 generation_config = {
-  "temperature": 1,
-  "top_p": 0.95,
-  "top_k": 40,
-  "max_output_tokens": 8192,
-  "response_mime_type": "text/plain",
+    "temperature": 1,
+    "top_p": 0.95,
+    "top_k": 40,
+    "max_output_tokens": 8192,
+    "response_mime_type": "text/plain",
 }
 
 model = genai.GenerativeModel(
-  model_name="gemini-2.0-flash-exp",
-  generation_config=generation_config,
+    model_name="gemini-2.0-flash-exp",
+    generation_config=generation_config,
 )
 chat_session = model.start_chat(
-  history=[]
+    history=[]
 )
 
 # --- Function to Get Response from Chatbot ---
@@ -33,7 +40,7 @@ def get_response(user_message):
     except Exception as e:
         return f"Error: {str(e)}"
 
-# --- Page Configuration (Must be the first Streamlit command) ---
+# --- Page Configuration ---
 st.set_page_config(page_title="Future Forge", layout="wide")
 
 # --- Load CSS Styling ---
@@ -41,7 +48,6 @@ def load_css():
     with open("static/styles.css", "r") as css_file:
         css = f"<style>{css_file.read()}</style>"
         st.markdown(css, unsafe_allow_html=True)
-
 
 # --- Initialize Session State ---
 def initialize_session_state():
@@ -57,14 +63,18 @@ def initialize_session_state():
         st.session_state.chosen_character = None
     if 'nickname' not in st.session_state:
         st.session_state.nickname = None
-
-# --- Upgrade User Character ---
-def upgrade_character():
-    if 'experience_points' in st.session_state and st.session_state.experience_points >= 100 * st.session_state.user_level:
-        st.session_state.user_level += 1
-        st.session_state.experience_points = 0
-        return f"Congratulations! You've leveled up to level {st.session_state.user_level}!"
-    return None
+    if 'education_level' not in st.session_state:
+        st.session_state.education_level = None
+    if 'work_status' not in st.session_state:
+        st.session_state.work_status = None
+    if 'industry' not in st.session_state:
+        st.session_state.industry = None
+    if 'career_goals' not in st.session_state:
+        st.session_state.career_goals = None
+    if 'skills' not in st.session_state:
+        st.session_state.skills = None
+    if 'learning_modes' not in st.session_state:
+        st.session_state.learning_modes = None
 
 # --- Character Avatar Based on Level ---
 def get_character_avatar(level, chosen_character):
@@ -90,6 +100,15 @@ def get_character_avatar(level, chosen_character):
     }
     return avatar_mapping.get(chosen_character, avatar_mapping["Cool Guy"]).get(level, "static/images/avatar_level_1.png")
 
+# --- Upgrade User Character ---
+def upgrade_character():
+    if 'experience_points' in st.session_state and st.session_state.experience_points >= 100 * st.session_state.user_level:
+        st.session_state.user_level += 1
+        st.session_state.experience_points = 0
+        return f"Congratulations! You've leveled up to level {st.session_state.user_level}!"
+    return None
+
+# --- Streamlit App ---
 # --- Streamlit App ---
 def main():
     
@@ -100,20 +119,6 @@ def main():
     initialize_session_state()
 
     # --- Character Selection Section ---
-        # Character Selection Section
-    st.title("Welcome to Future Forge!")
-    user_input = st.text_input("Ask me anything...")
-
-    if user_input:
-        with st.spinner("Thinking... 🤔"):
-            response = get_response(user_input)
-            st.write(f"Response: {response}")
-
-    if 'chosen_character' not in st.session_state:
-        st.session_state.chosen_character = None
-    if 'nickname' not in st.session_state:
-        st.session_state.nickname = None
-
     if not st.session_state.get('chosen_character'):
         st.title("Welcome to Future Forge!")
         st.write("Select your character to begin:")
@@ -137,124 +142,83 @@ def main():
             else:
                 st.warning("Please provide a nickname for your character!")
 
-    # Display the chosen character and nickname
+    # --- Post Character Selection: Collect Career Information ---
     if st.session_state.get('chosen_character') and st.session_state.get('nickname'):
-        st.sidebar.write(f"*Character:* {st.session_state.chosen_character}")
-        st.sidebar.write(f"*Nickname:* {st.session_state.nickname}")
+        st.title(f"Welcome {st.session_state.nickname}!")
 
-        # Upgrade Character if conditions met
-        upgrade_message = upgrade_character()
-        if upgrade_message:
-            st.sidebar.success(upgrade_message)
+        # Collect user career-related data
+        st.write("Please answer the following questions to help us provide you with a tailored roadmap:")
 
-        # --- Hero Section ---
-        st.markdown(
-            """
-            <div class="hero" style="color: black;">
-                <h1>Forge Your Future with FutureForge</h1>
-                <p>Explore personalized career guidance, interactive learning, and gamified experiences!</p>
-                <a href="#features" class="cta-button">Explore Features</a>
-            </div>
-            """,
-            unsafe_allow_html=True
+        # 1. Education Level
+        st.session_state.education_level = st.selectbox(
+            "What is your current education level?",
+            ["High school diploma", "Undergraduate degree", "Graduate degree", "Other (please specify)"]
         )
 
-        # --- Features Section with Blocks ---
-        st.markdown(
-            """
-            <div class="features" id="features" style="color: black;">
-                <h2>Why Choose FutureForge?</h2>
-            </div>
-            """,
-            unsafe_allow_html=True
+        # 2. Work Status
+        st.session_state.work_status = st.selectbox(
+            "What is your current work status?",
+            ["Employed full-time", "Employed part-time", "Unemployed", "Student", "Freelance/self-employed"]
         )
 
-        # Create 3 columns for the blocks of options
-        col1, col2, col3 = st.columns(3)
+        # 3. Industry Interest
+        st.session_state.industry = st.selectbox(
+            "What industry are you interested in?",
+            ["Technology/IT", "Business/Finance", "Creative Arts/Design", "Healthcare", "Engineering", "Other (please specify)"]
+        )
 
-        # Column 1: Personalized Plans
-        with col1:
-            st.markdown(
-                """
-                <div class="feature-card">
-                    <h3>📋 Personalized Plans</h3>
-                    <p>Get tailored career roadmaps that suit your goals and aspirations.</p>
-                </div>
-                """,
-                unsafe_allow_html=True
-            )
+        # 4. Career Goals
+        st.session_state.career_goals = st.selectbox(
+            "What are your career goals?",
+            ["Start my own business", "Climb the corporate ladder", "Change industry", "Transition into a different role", "Advance in my current field", "Other (please specify)"]
+        )
 
-        # Column 2: Comprehensive Resources
-        with col2:
-            st.markdown(
-                """
-                <div class="feature-card">
-                    <h3>📚 Comprehensive Resources</h3>
-                    <p>Access articles, notes, and videos curated for your learning needs.</p>
-                </div>
-                """,
-                unsafe_allow_html=True
-            )
-        # Column 3: Interactive Chatbot
-        with col3:
-            st.markdown(
-                """
-                <div class="feature-card">
-                    <h3>🤖 Interactive Chatbot</h3>
-                    <p>Chat with our AI coach to get answers, summaries, and tips.</p>
-                </div>
-                """,
-                unsafe_allow_html=True
-            )
+        # 5. Skills
+        st.session_state.skills = st.selectbox(
+            "What skills do you currently have?",
+            ["Technical skills (programming, data analysis, etc.)", "Soft skills (communication, leadership, etc.)", "Creative skills (design, writing, etc.)", "None yet"]
+        )
 
-        # --- Add more rows if needed ---
-        col4, col5 = st.columns(2)
+        # 6. Learning Modes
+        st.session_state.learning_modes = st.selectbox(
+            "What are your preferred learning modes?",
+            ["Online courses", "In-person classes", "Blended learning (a mix of online and in-person)", "Self-paced learning"]
+        )
 
-        # Column 4: Gamified Learning
-        with col4:
-            st.markdown(
-                """
-                <div class="feature-card">
-                    <h3>🏆 Gamified Learning</h3>
-                    <p>Earn rewards and badges as you achieve your milestones!</p>
-                </div>
-                """,
-                unsafe_allow_html=True
-            )
+        # Button to generate roadmap
+        if st.button("Generate Roadmap"):
+            # Create a personalized roadmap message
+            roadmap_message = f"""
+            Based on your responses, here is your personalized roadmap:
 
-        # Column 5: Additional Feature (if needed)
-        with col5:
-            st.markdown(
-                """
-                <div class="feature-card">
-                    <h3>🌱 Continuous Growth</h3>
-                    <p>Keep progressing with continuous learning and development paths.</p>
-                </div>
-                """,
-                unsafe_allow_html=True
-            )
+            **Education Level:** {st.session_state.education_level}
+            **Work Status:** {st.session_state.work_status}
+            **Industry Interest:** {st.session_state.industry}
+            **Career Goals:** {st.session_state.career_goals}
+            **Current Skills:** {st.session_state.skills}
+            **Preferred Learning Mode:** {st.session_state.learning_modes}
+            """
+            st.session_state.roadmap = roadmap_message
 
-        # --- Chatbot Section ---
-        st.sidebar.title(f"Chat with {st.session_state.nickname} 🤖 (Level {st.session_state.user_level})")
+        # --- Sidebar Section ---
+        st.sidebar.title(f"Chat with Forge Lord 🤖 (Level {st.session_state.user_level})")
 
-        # Display Character Avatar
+        # Display Character Avatar in Sidebar
         avatar_url = get_character_avatar(st.session_state.user_level, st.session_state.chosen_character)
         st.sidebar.image(avatar_url, width=100)
 
         st.sidebar.markdown(
-            "Ask the chatbot anything related to your career goals, summaries, or topics of interest!",
+            "Ask Forge Lord anything related to your career goals, summaries, or topics of interest!",
             unsafe_allow_html=True
         )
 
-        # Add a text area for multi-line input
+        # Chatbot Area
         user_input = st.sidebar.text_area("Type your question:", placeholder="Ask me anything...")
 
-        # Display responses interactively with styled text box
         if st.sidebar.button("Submit"):
             if user_input:
                 with st.spinner("Thinking... 🤔"):
                     response = get_response(user_input)
-
                     st.sidebar.markdown(f"""
                     <div style='
                         background-color: #f8f9fa; 
@@ -267,15 +231,15 @@ def main():
                         <strong>Response:</strong> {response}
                     </div>
                     """, unsafe_allow_html=True)
-
-                    # Increase experience points after each interaction
                     st.session_state.experience_points += 10
-
-                    # Store chat history
                     st.session_state.chat_history.append((user_input, response))
-
             else:
                 st.sidebar.warning("Please enter a question!")
+
+        # --- Roadmap Display ---
+        if 'roadmap' in st.session_state:
+            st.sidebar.markdown("## Your Roadmap 🗺️")
+            st.sidebar.markdown(st.session_state.roadmap)
 
         # --- How It Works Section ---
         st.markdown(
